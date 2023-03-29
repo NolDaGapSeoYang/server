@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Place {
+  id      String @id @default(uuid())
+  name    String
+  address String
+
+  thumbnails String[]
+  images     String[]
+
+  metadata Metadata[]
+
+  parkingAvailable Boolean
+  parkingCount     Int
+
+  wheelChairRentable Boolean
+  elevatorAvailable  Boolean
+  toiletAvailable    Boolean
+
+  pathExists      Boolean
+  pathDescription String?
+
+  latitude  Float
+  longitude Float
+
+  etc String?
+
+  basicInfo String
+
+  category String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Metadata {
+  id      String  @id @default(uuid())
+  key     String
+  value   String
+  Place   Place?  @relation(fields: [placeId], references: [id])
+  placeId String?
+}

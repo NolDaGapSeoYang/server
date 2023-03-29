@@ -1,0 +1,34 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Place {
+  id: String!
+  name: String!
+  address: String!
+  thumbnails: [String!]!
+  images: [String!]!
+  parkingAvailable: Boolean!
+  parkingCount: Float!
+  wheelChairRentable: Boolean!
+  elevatorAvailable: Boolean!
+  toiletAvailable: Boolean!
+  pathExists: Boolean!
+  pathDescription: String
+  latitude: Float!
+  longitude: Float!
+  etc: String
+  basicInfo: String!
+  category: String!
+  metadata: [Metadata!]!
+}
+
+type Metadata {
+  id: String!
+  key: String!
+  value: String!
+}
+
+type Query {
+  places: [Place!]!
+}
