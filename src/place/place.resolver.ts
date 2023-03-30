@@ -1,6 +1,6 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 
-import { PlaceConnectionArgs, PlacesConnection } from './dtos';
+import { PlaceConnectionArgs, PlaceCountInput, PlacesConnection } from './dtos';
 import { PlaceService } from './place.service';
 import { Place } from './schemas';
 
@@ -18,5 +18,20 @@ export class PlaceResolver {
   @Query(() => Place, { nullable: true })
   async place(@Args('id') id: string): Promise<Place | null> {
     return this.placeService.findOneById(id);
+  }
+
+  @Query(() => Number)
+  async placeCount(@Args('input') input: PlaceCountInput): Promise<number> {
+    return this.placeService.countPlaces(input);
+  }
+
+  @ResolveField(() => String, { nullable: true })
+  async tel(@Parent() parent: Place) {
+    const metadata = parent.metadata;
+    if (!metadata) return null;
+    const telMetadata = metadata.find((metadata) => metadata.key === '문의');
+
+    if (!telMetadata) return null;
+    return telMetadata.value;
   }
 }

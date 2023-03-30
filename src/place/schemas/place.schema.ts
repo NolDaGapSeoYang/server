@@ -56,6 +56,9 @@ export class Place {
   @Field(() => Boolean)
   needCompanion: boolean;
 
+  @Field(() => Number)
+  distance: number;
+
   @Field(() => [Metadata])
   metadata: Metadata[];
 }

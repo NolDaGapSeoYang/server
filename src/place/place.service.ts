@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
 import { Injectable } from '@nestjs/common';
 
-import { PlaceConnectionArgs, PlacesConnection } from './dtos';
+import { PlaceConnectionArgs, PlaceCountInput, PlacesConnection } from './dtos';
 import { Place } from './schemas';
 
 @Injectable()
@@ -19,6 +19,40 @@ export class PlaceService {
         metadata: true,
       },
     });
+  }
+
+  async countPlaces(input: PlaceCountInput): Promise<number> {
+    const {
+      categories,
+      parkingAvailable,
+      wheelChairRentable,
+      elevatorAvailable,
+      toiletAvailable,
+      pathExists,
+      needCompanion,
+    } = input;
+
+    const baseArgs = {
+      where: {
+        AND: [
+          ...(categories ? [{ category: { in: categories } }] : []),
+          {
+            needCompanion,
+          },
+          ...(parkingAvailable !== undefined ? [{ parkingAvailable }] : []),
+          ...(wheelChairRentable !== undefined ? [{ wheelChairRentable }] : []),
+          ...(elevatorAvailable !== undefined ? [{ elevatorAvailable }] : []),
+          ...(toiletAvailable !== undefined ? [{ toiletAvailable }] : []),
+          ...(pathExists !== undefined ? [{ pathExists }] : []),
+        ],
+      },
+    };
+
+    const count = await this.prisma.place.count({
+      ...baseArgs,
+    });
+
+    return count;
   }
 
   async paginatePlaces(args: PlaceConnectionArgs): Promise<PlacesConnection> {
@@ -55,6 +89,9 @@ export class PlaceService {
     });
 
     // const nodes = await this.prisma.place.findMany({
+    //   orderBy: {
+    //     ...(coordinates ? { distance: 'asc' } : { facilityCount: 'desc' }),
+    //   },
     //   include: {
     //     metadata: true,
     //   },
@@ -64,6 +101,9 @@ export class PlaceService {
       (args) =>
         this.prisma.place.findMany({
           ...args,
+          orderBy: {
+            ...(coordinates ? { distance: 'asc' } : { facilityCount: 'desc' }),
+          },
           ...baseArgs,
           ...{
             include: {

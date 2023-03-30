@@ -28,7 +28,9 @@ type Place {
   basicInfo: String!
   category: String!
   needCompanion: Boolean!
+  distance: Float!
   metadata: [Metadata!]!
+  tel: String
 }
 
 type Metadata {
@@ -71,6 +73,7 @@ type Query {
     coordinates: CoordinateInput
   ): PlacesConnection!
   place(id: String!): Place
+  placeCount(input: PlaceCountInput!): Float!
 }
 
 input CoordinateInput {
@@ -78,33 +81,12 @@ input CoordinateInput {
   longitude: Float!
 }
 
-type Mutation {
-  createPlace(input: CreatePlaceInput!): Place!
-  createManyPlaces: Float!
-}
-
-input CreatePlaceInput {
-  name: String!
-  address: String!
-  thumbnails: [String!]!
-  images: [String!]!
-  parkingAvailable: Boolean!
-  parkingCount: Float!
-  wheelChairRentable: Boolean!
-  elevatorAvailable: Boolean!
-  toiletAvailable: Boolean!
-  pathExists: Boolean!
-  pathDescription: String
-  latitude: Float!
-  longitude: Float!
-  etc: String
-  basicInfo: String!
-  category: String!
+input PlaceCountInput {
+  categories: [String!]
+  parkingAvailable: Boolean
+  wheelChairRentable: Boolean
+  elevatorAvailable: Boolean
+  toiletAvailable: Boolean
+  pathExists: Boolean
   needCompanion: Boolean!
-  metadata: [CreateMetaDataInput!]!
-}
-
-input CreateMetaDataInput {
-  key: String!
-  value: String!
 }
