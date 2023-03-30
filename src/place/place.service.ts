@@ -88,15 +88,6 @@ export class PlaceService {
       ...baseArgs,
     });
 
-    // const nodes = await this.prisma.place.findMany({
-    //   orderBy: {
-    //     ...(coordinates ? { distance: 'asc' } : { facilityCount: 'desc' }),
-    //   },
-    //   include: {
-    //     metadata: true,
-    //   },
-    // });
-
     const { edges, pageInfo } = await findManyCursorConnection(
       (args) =>
         this.prisma.place.findMany({
