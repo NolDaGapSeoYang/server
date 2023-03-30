@@ -39,11 +39,11 @@ export class PlaceService {
           {
             needCompanion,
           },
-          ...(parkingAvailable !== undefined ? [{ parkingAvailable }] : []),
-          ...(wheelChairRentable !== undefined ? [{ wheelChairRentable }] : []),
-          ...(elevatorAvailable !== undefined ? [{ elevatorAvailable }] : []),
-          ...(toiletAvailable !== undefined ? [{ toiletAvailable }] : []),
-          ...(pathExists !== undefined ? [{ pathExists }] : []),
+          ...(parkingAvailable ? [{ parkingAvailable }] : []),
+          ...(wheelChairRentable ? [{ wheelChairRentable }] : []),
+          ...(elevatorAvailable ? [{ elevatorAvailable }] : []),
+          ...(toiletAvailable ? [{ toiletAvailable }] : []),
+          ...(pathExists ? [{ pathExists }] : []),
         ],
       },
     };
@@ -75,11 +75,11 @@ export class PlaceService {
           {
             needCompanion,
           },
-          ...(parkingAvailable !== undefined ? [{ parkingAvailable }] : []),
-          ...(wheelChairRentable !== undefined ? [{ wheelChairRentable }] : []),
-          ...(elevatorAvailable !== undefined ? [{ elevatorAvailable }] : []),
-          ...(toiletAvailable !== undefined ? [{ toiletAvailable }] : []),
-          ...(pathExists !== undefined ? [{ pathExists }] : []),
+          ...(parkingAvailable ? [{ parkingAvailable }] : []),
+          ...(wheelChairRentable ? [{ wheelChairRentable }] : []),
+          ...(elevatorAvailable ? [{ elevatorAvailable }] : []),
+          ...(toiletAvailable ? [{ toiletAvailable }] : []),
+          ...(pathExists ? [{ pathExists }] : []),
         ],
       },
     };
