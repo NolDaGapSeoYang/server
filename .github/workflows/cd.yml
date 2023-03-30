@@ -61,4 +61,4 @@ jobs:
           ECR_REGISTRY: 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com
           ECR_REPOSITORY: uhdre-gamdi-api
           TAG: ${{ steps.package-version.outputs.current-version}}
-        run: kubectl apply -f index.yaml
+        run: envsubst < index.yaml | kubectl apply -f -
