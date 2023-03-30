@@ -102,4 +102,7 @@ export class PlacesConnection implements Connection<Place> {
 
   @Field(() => [PlaceEdge])
   edges: PlaceEdge[];
+
+  @Field(() => Number)
+  totalCount: number;
 }

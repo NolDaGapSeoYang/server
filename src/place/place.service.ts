@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
 import { Injectable } from '@nestjs/common';
 
-import * as places from '../assets/dummy.json';
+import * as places from '../assets/final-parsed.json';
 import {
   CreatePlaceInput,
   PlaceConnectionArgs,
@@ -32,6 +32,8 @@ export class PlaceService {
   }
 
   async createMany(): Promise<number> {
+    await this.prisma.place.deleteMany();
+
     for (const place of places) {
       await this.prisma.place.create({
         data: {
@@ -86,10 +88,11 @@ export class PlaceService {
           ...(pathExists !== undefined ? [{ pathExists }] : []),
         ],
       },
-      include: {
-        metadata: true,
-      },
     };
+
+    const count = await this.prisma.place.count({
+      ...baseArgs,
+    });
 
     // const nodes = await this.prisma.place.findMany({
     //   include: {
@@ -98,7 +101,16 @@ export class PlaceService {
     // });
 
     const { edges, pageInfo } = await findManyCursorConnection(
-      (args) => this.prisma.place.findMany({ ...args, ...baseArgs }),
+      (args) =>
+        this.prisma.place.findMany({
+          ...args,
+          ...baseArgs,
+          ...{
+            include: {
+              metadata: true,
+            },
+          },
+        }),
       () => this.prisma.place.count(),
       connArgs,
     );
@@ -107,6 +119,7 @@ export class PlaceService {
       // @ts-expect-error type difference
       pageInfo,
       edges,
+      totalCount: count,
     };
   }
 }
