@@ -1,9 +1,12 @@
 FROM node:16
 
+ARG DATABASE_URL=${DATABASE_URL}
+ENV DATABASE_URL=${DATABASE_URL}
+
 COPY . /api
 WORKDIR /api
 
-RUN yarn && yarn build
+RUN export DATABASE_URL=${DATABASE_URL} && yarn && yarn build
 
 EXPOSE 3000
 
