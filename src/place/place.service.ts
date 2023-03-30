@@ -3,52 +3,12 @@ import { PrismaService } from 'src/prisma.service';
 import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
 import { Injectable } from '@nestjs/common';
 
-import * as places from '../assets/final-parsed.json';
-import {
-  CreatePlaceInput,
-  PlaceConnectionArgs,
-  PlacesConnection,
-} from './dtos';
+import { PlaceConnectionArgs, PlacesConnection } from './dtos';
 import { Place } from './schemas';
 
 @Injectable()
 export class PlaceService {
   constructor(private readonly prisma: PrismaService) {}
-
-  async createPlace(input: CreatePlaceInput): Promise<Place> {
-    return this.prisma.place.create({
-      data: {
-        ...input,
-        metadata: {
-          createMany: {
-            data: input.metadata,
-          },
-        },
-      },
-      include: {
-        metadata: true,
-      },
-    });
-  }
-
-  async createMany(): Promise<number> {
-    await this.prisma.place.deleteMany();
-
-    for (const place of places) {
-      await this.prisma.place.create({
-        data: {
-          ...place,
-          metadata: {
-            createMany: {
-              data: place.metadata.map((m) => ({ key: m.tag, value: m.value })),
-            },
-          },
-        },
-      });
-    }
-
-    return places.length;
-  }
 
   async findOneById(id: string): Promise<Place | null> {
     return this.prisma.place.findUnique({
