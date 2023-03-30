@@ -37,7 +37,8 @@ model Place {
 
   basicInfo String
 
-  category String
+  category      String
+  needCompanion Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

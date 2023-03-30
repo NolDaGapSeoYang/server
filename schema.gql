@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type Place {
   id: String!
   name: String!
@@ -20,6 +27,7 @@ type Place {
   etc: String
   basicInfo: String!
   category: String!
+  needCompanion: Boolean!
   metadata: [Metadata!]!
 }
 
@@ -29,6 +37,73 @@ type Metadata {
   value: String!
 }
 
+type PlacesConnection {
+  pageInfo: PageInfo!
+  edges: [PlaceEdge!]!
+}
+
+type PlaceEdge {
+  node: Place!
+  cursor: String!
+}
+
 type Query {
-  places: [Place!]!
+  places(
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+    categories: [String!]
+    parkingAvailable: Boolean
+    wheelChairRentable: Boolean
+    elevatorAvailable: Boolean
+    toiletAvailable: Boolean
+    pathExists: Boolean
+    needCompanion: Boolean!
+    coordinates: CoordinateInput
+  ): PlacesConnection!
+  place(id: String!): Place
+}
+
+input CoordinateInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+type Mutation {
+  createPlace(input: CreatePlaceInput!): Place!
+  createManyPlaces: Float!
+}
+
+input CreatePlaceInput {
+  name: String!
+  address: String!
+  thumbnails: [String!]!
+  images: [String!]!
+  parkingAvailable: Boolean!
+  parkingCount: Float!
+  wheelChairRentable: Boolean!
+  elevatorAvailable: Boolean!
+  toiletAvailable: Boolean!
+  pathExists: Boolean!
+  pathDescription: String
+  latitude: Float!
+  longitude: Float!
+  etc: String
+  basicInfo: String!
+  category: String!
+  needCompanion: Boolean!
+  metadata: [CreateMetaDataInput!]!
+}
+
+input CreateMetaDataInput {
+  key: String!
+  value: String!
 }
