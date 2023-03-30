@@ -20,6 +20,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -29,12 +33,12 @@ jobs:
         run: |
           docker build \
             --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
-            -t uhdre-gamdi-api \
+            -t ${{ env.ECR_REPOSITORY }}:${{ steps.package-version.outputs.current-version}} \
             .
       - name: Tag Docker iamge
         id: tag-image
-        run: docker tag uhdre-gamdi-api:latest 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/uhdre-gamdi-api:latest
+        run: docker tag ${{ env.ECR_REPOSITORY }}:${{ steps.package-version.outputs.current-version}} ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.package-version.outputs.current-version}}
 
       - name: Push Docker image to Amazon ECR
         id: push-image
-        run: docker push 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/uhdre-gamdi-api:latest
+        run: docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
