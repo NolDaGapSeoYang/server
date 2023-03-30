@@ -35,7 +35,9 @@ export class PlaceService {
     const baseArgs = {
       where: {
         AND: [
-          ...(categories ? [{ category: { in: categories } }] : []),
+          ...(categories && categories.length > 0
+            ? [{ category: { in: categories } }]
+            : []),
           {
             needCompanion,
           },
@@ -71,7 +73,9 @@ export class PlaceService {
     const baseArgs = {
       where: {
         AND: [
-          ...(categories ? [{ category: { in: categories } }] : []),
+          ...(categories && categories.length > 0
+            ? [{ category: { in: categories } }]
+            : []),
           {
             needCompanion,
           },
